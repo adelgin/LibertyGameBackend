@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	"libertyGame/config"
 	"libertyGame/pkg/logger"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
@@ -44,4 +46,26 @@ func Parse() config.Db {
 
 	logger.Info().Err(err).Msg("Connection to the database established successfully.")
 	return dbConfig
+}
+
+// Postgres - .
+type Postgres struct {
+	*sqlx.DB
+}
+
+func New(cfg *config.Db) (*Postgres, error) {
+	db, err := sqlx.Open("pgx", cfg.ConnectionString())
+	if err != nil {
+		return nil, err
+	}
+
+	pgdb := Postgres{
+		db,
+	}
+
+	db.SetMaxOpenConns(cfg.MaxOpenConns)
+	db.SetMaxIdleConns(cfg.MaxIdleConns)
+	db.SetConnMaxLifetime(cfg.ConnMaxLifeTime * time.Minute)
+
+	return &pgdb, nil
 }
