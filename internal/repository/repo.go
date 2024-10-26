@@ -21,9 +21,9 @@ type Repository interface {
 }
 
 type User struct {
-	UserID    int64     `db:"id"             json:"-"`
-	UserName  string    `db:"username"       json:"-"`
-	InviterID int64     `db:"inviter_id"     json:"-"`
+	UserID    int64     `db:"id"             json:"id"`
+	UserName  string    `db:"username"       json:"username"`
+	InviterID int64     `db:"inviter_id"     json:"inviter_id"`
 	CreatedAt time.Time `db:"created_at"     json:"-"`
 }
 
@@ -31,9 +31,9 @@ type repository struct {
 	db *postgres.Postgres
 }
 
-func NewRepository(db postgres.Postgres) Repository {
+func NewRepository(db *postgres.Postgres) Repository {
 	return &repository{
-		db: &db,
+		db: db,
 	}
 }
 

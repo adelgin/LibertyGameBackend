@@ -25,7 +25,7 @@ type LogConfig struct {
 type MainBackendConfig struct {
 	Host string `long:"host" env:"HOST" description:"Main backend host" required:"yes"`
 	Port string `long:"port" env:"PORT" description:"Main backend port" required:"yes"`
-	Path string `long:"path" env:"PATH" description:"Main backend path for user info endpoint" required:"yes"`
+	//Path string `long:"path" env:"PATH" description:"Main backend path for user info endpoint" required:"yes"`
 }
 
 func Parse() (*Config, error) {
