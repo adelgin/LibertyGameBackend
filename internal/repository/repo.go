@@ -10,6 +10,16 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type Repository interface {
+	//NewRepository(db postgres.Postgres) Repository
+	GetUserByID(ctx context.Context, id int64) (*User, error)
+	AddUser(ctx context.Context, user *User) error
+	CountOfAllUsers(ctx context.Context) (int64, error)
+	GetRefsOfUserFromID(ctx context.Context, id int64) ([]User, error)
+	CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error)
+	GetTopOfRefs(ctx context.Context, count int) ([]User, error)
+}
+
 type User struct {
 	UserID    int64     `db:"id"             json:"-"`
 	UserName  string    `db:"username"       json:"-"`
@@ -21,8 +31,8 @@ type repository struct {
 	db *postgres.Postgres
 }
 
-func NewRepository(db postgres.Postgres) repository {
-	return repository{
+func NewRepository(db postgres.Postgres) Repository {
+	return &repository{
 		db: &db,
 	}
 }
@@ -78,7 +88,7 @@ func (r repository) CountRefsOfUserFromID(ctx context.Context, id int64) (int64,
 	return counter, nil
 }
 
-func (r repository) GetTopOfRefs(ctx context.Context, count int64) ([]User, error) { //tested
+func (r repository) GetTopOfRefs(ctx context.Context, count int) ([]User, error) { //tested
 	var users []User
 	rows, err := r.db.QueryContext(ctx, "SELECT u.id, u.username, COUNT(r.id) AS invites_count FROM users u LEFT JOIN users r ON u.id = r.inviter_id GROUP BY u.id, u.username ORDER BY invites_count DESC LIMIT $1", count)
 	if err != nil {

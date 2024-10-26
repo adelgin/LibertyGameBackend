@@ -13,7 +13,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Parse() config.Db {
+func ParseDB() config.Db {
 	logger, err := logger.NewLogger()
 	if err != nil {
 		log.Fatalf("error init logger: %v", err)
