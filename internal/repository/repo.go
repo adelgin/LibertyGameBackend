@@ -20,7 +20,7 @@ type Repository interface {
 	CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error)
 	GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error)
 	GetMonthStatistics(ctx context.Context) ([]MonthStatistics, error)
-	CreateTable(ctx context.Context) error
+	CreateDbAndTable(ctx context.Context) error
 }
 
 type User struct {
@@ -133,14 +133,21 @@ func (r repository) GetMonthStatistics(ctx context.Context) ([]MonthStatistics, 
 	return stats, nil
 }
 
-func (r repository) CreateTable(ctx context.Context) error {
-	query := `CREATE TABLE IF NOT EXISTS users (
+func (r repository) CreateDbAndTable(ctx context.Context) error {
+	query := `
+	DO $$
+	BEGIN
+  	IF NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'liberty') THEN
+    	CREATE DATABASE liberty;
+  	END IF;
+	END $$;
+	CREATE TABLE IF NOT EXISTS users (
 	id BIGINT PRIMARY KEY,
 	username VARCHAR(255) UNIQUE NOT NULL,
 	inviter_id INT,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (inviter_id) REFERENCES users(id)
-	)`
+	);`
 	_, err := r.db.ExecContext(ctx, query)
 	if err != nil {
 		return fmt.Errorf("ошибка создания таблицы users: %w", err)
