@@ -8,6 +8,7 @@ import (
 
 	"libertyGame/pkg/errors_handler"
 
+	"github.com/go-chi/chi"
 	"github.com/rs/zerolog/log"
 )
 
@@ -15,8 +16,7 @@ import (
 func (i *Implementation) GetUserByID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		userIDStr := r.URL.Query().Get("id")
-		userID, err := strconv.ParseInt(userIDStr, 10, 64)
+		userID, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 		if err != nil {
 			i.SendErrorMessage(err, errors_handler.ErrBadRequest, w)
 			return

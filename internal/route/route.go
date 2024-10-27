@@ -33,11 +33,13 @@ func (route *Routes) Setup() {
 
 		{
 			route.log.Info().Msg("setting up handlers routes")
-			r.Get("/users/all", route.i.CountOfAllUsers())
-			r.Get("/users/{count}/top", route.i.GetTopOfRefs())
-			r.Get("/user/{id}/user", route.i.GetUserByID())
-			r.Get("/user/{id}/refs", route.i.GetRefsOfUserFromID())
-			r.Get("/user/{id}/refscount", route.i.CountRefsOfUserFromID())
+			r.Get("/users/all", route.i.CountOfAllUsers())                 // tested
+			r.Get("/users/{count}/top", route.i.GetTopOfRefs())            // tested
+			r.Get("/user/{id}", route.i.GetUserByID())                     // tested
+			r.Get("/user/{id}/refs", route.i.GetRefsOfUserFromID())        // tested
+			r.Get("/user/{id}/refscount", route.i.CountRefsOfUserFromID()) // tested
+			r.Get("/monthstat", route.i.GetMonthStatisticsHandler())       // tested
+			r.Post("/users", route.i.UserRegistration())                   // not tested
 		}
 	})
 }

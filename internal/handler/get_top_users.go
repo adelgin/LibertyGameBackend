@@ -8,6 +8,8 @@ import (
 
 	"libertyGame/pkg/errors_handler"
 
+	"github.com/go-chi/chi"
+
 	"github.com/rs/zerolog/log"
 )
 
@@ -15,7 +17,7 @@ import (
 func (i *Implementation) GetTopOfRefs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		count, err := strconv.Atoi(r.URL.Query().Get("count"))
+		count, err := strconv.ParseInt(chi.URLParam(r, "count"), 10, 64)
 		if err != nil || count < 0 {
 			i.SendErrorMessage(err, errors_handler.ErrBadRequest, w)
 			return

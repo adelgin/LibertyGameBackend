@@ -1,35 +1,36 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
-	"strconv"
+	"time"
 
+	"libertyGame/internal/repository"
 	"libertyGame/internal/utils"
-
 	"libertyGame/pkg/errors_handler"
-
-	"github.com/go-chi/chi"
 
 	"github.com/rs/zerolog/log"
 )
 
-// CountRefsOfUserFromID
-func (i *Implementation) CountRefsOfUserFromID() http.HandlerFunc {
+// UserRegistration
+func (i *Implementation) UserRegistration() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		var userRequest repository.User
 
-		userID, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
-		if err != nil {
+		if err := json.NewDecoder(r.Body).Decode(&userRequest); err != nil {
 			i.SendErrorMessage(err, errors_handler.ErrBadRequest, w)
 			return
 		}
 
-		refCount, err := i.UserService.CountRefsOfUserFromID(r.Context(), userID)
+		userRequest.CreatedAt = time.Now()
+
+		err := i.UserService.AddUser(r.Context(), &userRequest)
 		if err != nil {
 			i.SendErrorMessage(err, errors_handler.ErrInternalDatabase, w)
 			return
 		}
 
-		if err := utils.Json(w, http.StatusOK, refCount); err != nil {
+		if err := utils.Json(w, http.StatusCreated, userRequest); err != nil {
 			log.Error().Err(err).Msg("Error: ")
 		}
 	}

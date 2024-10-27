@@ -14,7 +14,8 @@ type UserService interface {
 	CountOfAllUsers(ctx context.Context) (int64, error)
 	GetRefsOfUserFromID(ctx context.Context, id int64) ([]repository.User, error)
 	CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error)
-	GetTopOfRefs(ctx context.Context, count int) ([]repository.User, error)
+	GetTopOfRefs(ctx context.Context, count int64) ([]repository.Top_User, error)
+	GetMonthStatistics(ctx context.Context) ([]repository.MonthStatistics, error)
 }
 
 type userService struct {
@@ -48,9 +49,13 @@ func (s *userService) CountRefsOfUserFromID(ctx context.Context, id int64) (int6
 	return s.repo.CountRefsOfUserFromID(ctx, id)
 }
 
-func (s *userService) GetTopOfRefs(ctx context.Context, count int) ([]repository.User, error) {
+func (s *userService) GetTopOfRefs(ctx context.Context, count int64) ([]repository.Top_User, error) {
 	if count <= 0 {
 		return nil, fmt.Errorf("count must be a positive integer")
 	}
 	return s.repo.GetTopOfRefs(ctx, count)
+}
+
+func (s *userService) GetMonthStatistics(ctx context.Context) ([]repository.MonthStatistics, error) {
+	return s.repo.GetMonthStatistics(ctx)
 }

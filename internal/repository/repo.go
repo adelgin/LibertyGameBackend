@@ -2,29 +2,43 @@ package repository
 
 import (
 	"context"
+	//"database/sql"
 	"fmt"
 	postgres "libertyGame/internal"
 	"time"
 
+	_ "github.com/goccy/go-json"
 	_ "github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
 type Repository interface {
-	//NewRepository(db postgres.Postgres) Repository
 	GetUserByID(ctx context.Context, id int64) (*User, error)
 	AddUser(ctx context.Context, user *User) error
 	CountOfAllUsers(ctx context.Context) (int64, error)
 	GetRefsOfUserFromID(ctx context.Context, id int64) ([]User, error)
 	CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error)
-	GetTopOfRefs(ctx context.Context, count int) ([]User, error)
+	GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error)
+	GetMonthStatistics(ctx context.Context) ([]MonthStatistics, error)
 }
 
 type User struct {
 	UserID    int64     `db:"id"             json:"id"`
 	UserName  string    `db:"username"       json:"username"`
-	InviterID int64     `db:"inviter_id"     json:"inviter_id"`
-	CreatedAt time.Time `db:"created_at"     json:"-"`
+	InviterID *int64    `db:"inviter_id"     json:"inviter_id,omitempty"`
+	CreatedAt time.Time `db:"created_at"     json:"date_of_invite"`
+}
+
+type Top_User struct {
+	UserID       int64     `db:"id"             json:"id"`
+	UserName     string    `db:"username"       json:"username"`
+	InviterCount *int64    `db:"inviter_count"  json:"inviter_count"`
+	CreatedAt    time.Time `db:"created_at"     json:"date_of_invite"`
+}
+
+type MonthStatistics struct {
+	Months    string `db:"month"             json:"month"`
+	UserCount int64  `db:"user_count"             json:"user_count"`
 }
 
 type repository struct {
@@ -88,23 +102,32 @@ func (r repository) CountRefsOfUserFromID(ctx context.Context, id int64) (int64,
 	return counter, nil
 }
 
-func (r repository) GetTopOfRefs(ctx context.Context, count int) ([]User, error) { //tested
-	var users []User
-	rows, err := r.db.QueryContext(ctx, "SELECT u.id, u.username, COUNT(r.id) AS invites_count FROM users u LEFT JOIN users r ON u.id = r.inviter_id GROUP BY u.id, u.username ORDER BY invites_count DESC LIMIT $1", count)
+func (r repository) GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error) { //tested
+	var users []Top_User
+	rows, err := r.db.QueryContext(ctx, "WITH InvitedCounts AS (SELECT u.id, u.username, COUNT(inv.id) AS invited_count, u.created_at FROM users u LEFT JOIN users inv ON u.id = inv.inviter_id GROUP BY u.id, u.username, u.inviter_id, u.created_at) SELECT * FROM InvitedCounts ORDER BY invited_count DESC LIMIT $1;", count)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var user User
-		var invitesCount int64
+		var user Top_User
 
-		if err := rows.Scan(&user.UserID, &user.UserName, &invitesCount); err != nil {
+		if err := rows.Scan(&user.UserID, &user.UserName, &user.InviterCount, &user.CreatedAt); err != nil {
 			return nil, err
 		}
 		users = append(users, user)
 	}
 
 	return users, nil
+}
+
+func (r repository) GetMonthStatistics(ctx context.Context) ([]MonthStatistics, error) {
+	var stats []MonthStatistics
+	query := "SELECT TO_CHAR(created_at, 'MM.YYYY') AS month, COUNT(DISTINCT id) AS user_count FROM users GROUP BY month ORDER BY month"
+	err := r.db.SelectContext(ctx, &stats, query)
+	if err != nil {
+		return nil, err
+	}
+	return stats, nil
 }

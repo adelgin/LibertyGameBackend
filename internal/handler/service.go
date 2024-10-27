@@ -16,6 +16,8 @@ type HandleInterface interface {
 	GetRefsOfUserFromID() http.HandlerFunc
 	CountRefsOfUserFromID() http.HandlerFunc
 	GetTopOfRefs() http.HandlerFunc
+	UserRegistration() http.HandlerFunc
+	GetMonthStatisticsHandler() http.HandlerFunc
 }
 
 type Implementation struct {
