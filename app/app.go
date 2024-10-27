@@ -47,8 +47,6 @@ func Run() {
 
 	r := repository.NewRepository(database)
 
-	r.CreateDb(context.Background())
-
 	r.CreateTable(context.Background())
 
 	// services
