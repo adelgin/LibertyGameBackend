@@ -18,7 +18,7 @@ import (
 // @Description Метод возвращает данные юзера, какого именно юзера определяется по id.
 // @Accept json
 // @Produce json
-// @Param id path int true "id"
+// @Param id path int false "id"
 // @Success 200 {object} repository.User
 // @Failure 401 {integer} integer
 // @Failure 500 {object} errors_handler.ErrorResponse

@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Описание документации сваггер к api golang сервиса игры tap oil",
+        "description": "Описание документации сваггер к api golang сервиса игры LibertyGame",
         "title": "LibertyGame backend API [golang service]",
         "contact": {},
         "version": "1.0"
@@ -65,8 +65,7 @@
                         "type": "integer",
                         "description": "id",
                         "name": "id",
-                        "in": "path",
-                        "required": true
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -103,7 +102,7 @@
                 "tags": [
                     "UserService"
                 ],
-                "summary": "Получение данных о юзере",
+                "summary": "Получение списка рефералов пользователя.",
                 "parameters": [
                     {
                         "type": "integer",
@@ -195,6 +194,17 @@
                     "UserService"
                 ],
                 "summary": "Регистрация нового юзера",
+                "parameters": [
+                    {
+                        "description": "Информация о пользователе",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/repository.User"
+                        }
+                    }
+                ],
                 "responses": {
                     "401": {
                         "description": "Unauthorized",

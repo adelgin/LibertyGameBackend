@@ -1,0 +1,27 @@
+services:
+  db:
+    container_name: liberty_db
+    image: postgres:16-bookworm
+    ports:
+      - "5433:5432"
+    env_file: .env
+    volumes:
+      - db:/var/lib/postgresql/data
+  libertygo:
+    container_name: "liberty_go"
+    env_file: .env
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_NAME=db
+      - POSTGRES_PORT=5432
+      - MAIN_BACKEND_HOST=0.0.0.0
+      - MAIN_BACKEND_PORT=9001
+      - LOGGER_LEVEL=error
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
+    networks:
+      - default
+volumes:
+  db:
+    name: liberty_db

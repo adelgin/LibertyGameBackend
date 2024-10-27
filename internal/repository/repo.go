@@ -52,7 +52,7 @@ func NewRepository(db *postgres.Postgres) Repository {
 	}
 }
 
-func (r repository) GetUserByID(ctx context.Context, id int64) (*User, error) { // tested
+func (r repository) GetUserByID(ctx context.Context, id int64) (*User, error) {
 	var user User
 	err := r.db.GetContext(ctx, &user, "SELECT * FROM users WHERE id = $1", id)
 	if err != nil {
@@ -61,7 +61,7 @@ func (r repository) GetUserByID(ctx context.Context, id int64) (*User, error) { 
 	return &user, nil
 }
 
-func (r repository) AddUser(ctx context.Context, user *User) error { //tested
+func (r repository) AddUser(ctx context.Context, user *User) error {
 	query := `
 	INSERT INTO users (id, username, inviter_id, created_at)
 	VALUES (:id, :username, :inviter_id, :created_at)
@@ -76,7 +76,7 @@ func (r repository) AddUser(ctx context.Context, user *User) error { //tested
 	return nil
 }
 
-func (r repository) CountOfAllUsers(ctx context.Context) (int64, error) { //tested
+func (r repository) CountOfAllUsers(ctx context.Context) (int64, error) {
 	var counter int64
 	err := r.db.GetContext(ctx, &counter, "SELECT COUNT(*) FROM users")
 	if err != nil {
@@ -85,7 +85,7 @@ func (r repository) CountOfAllUsers(ctx context.Context) (int64, error) { //test
 	return counter, nil
 }
 
-func (r repository) GetRefsOfUserFromID(ctx context.Context, id int64) ([]User, error) { //tested
+func (r repository) GetRefsOfUserFromID(ctx context.Context, id int64) ([]User, error) {
 	var users []User
 	err := r.db.SelectContext(ctx, &users, "SELECT * FROM users WHERE inviter_id = $1", id)
 	if err != nil {
@@ -94,7 +94,7 @@ func (r repository) GetRefsOfUserFromID(ctx context.Context, id int64) ([]User, 
 	return users, nil
 }
 
-func (r repository) CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error) { //tested
+func (r repository) CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error) {
 	var counter int64
 	err := r.db.GetContext(ctx, &counter, "SELECT COUNT(*) FROM users WHERE inviter_id = $1;", id)
 	if err != nil {
@@ -103,7 +103,7 @@ func (r repository) CountRefsOfUserFromID(ctx context.Context, id int64) (int64,
 	return counter, nil
 }
 
-func (r repository) GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error) { //tested
+func (r repository) GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error) {
 	var users []Top_User
 	rows, err := r.db.QueryContext(ctx, "WITH InvitedCounts AS (SELECT u.id, u.username, COUNT(inv.id) AS invited_count, u.created_at FROM users u LEFT JOIN users inv ON u.id = inv.inviter_id GROUP BY u.id, u.username, u.inviter_id, u.created_at) SELECT * FROM InvitedCounts ORDER BY invited_count DESC LIMIT $1;", count)
 	if err != nil {

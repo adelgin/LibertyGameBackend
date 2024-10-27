@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"libertyGame/config"
+	_ "libertyGame/docs"
 	postgres "libertyGame/internal"
 	"libertyGame/internal/handler"
 	"libertyGame/internal/repository"
@@ -38,15 +39,13 @@ func Run() {
 		panic(any("cant parse variables from config: " + err.Error()))
 	}
 
-	// Создание соединения с базой данных
-	database, err := postgres.New(cfg.Db) // Передаем cfg.Db в postgres.New
+	database, err := postgres.New(cfg.Db)
 	if err != nil {
 		logger.Error().Err(err).Msg("Postgres start error")
 		return
 	}
 
-	// Создание репозитория
-	r := repository.NewRepository(database) // Передаем *database в repository.NewRepository
+	r := repository.NewRepository(database)
 
 	r.CreateTable(context.Background())
 

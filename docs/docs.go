@@ -71,8 +71,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "id",
                         "name": "id",
-                        "in": "path",
-                        "required": true
+                        "in": "path"
                     }
                 ],
                 "responses": {
@@ -109,7 +108,7 @@ const docTemplate = `{
                 "tags": [
                     "UserService"
                 ],
-                "summary": "Получение данных о юзере",
+                "summary": "Получение списка рефералов пользователя.",
                 "parameters": [
                     {
                         "type": "integer",
@@ -201,6 +200,17 @@ const docTemplate = `{
                     "UserService"
                 ],
                 "summary": "Регистрация нового юзера",
+                "parameters": [
+                    {
+                        "description": "Информация о пользователе",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/repository.User"
+                        }
+                    }
+                ],
                 "responses": {
                     "401": {
                         "description": "Unauthorized",
@@ -367,7 +377,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "LibertyGame backend API [golang service]",
-	Description:      "Описание документации сваггер к api golang сервиса игры tap oil",
+	Description:      "Описание документации сваггер к api golang сервиса игры LibertyGame",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

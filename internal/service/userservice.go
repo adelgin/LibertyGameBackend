@@ -33,7 +33,7 @@ func (s *userService) GetUserByID(ctx context.Context, id int64) (*repository.Us
 }
 
 func (s *userService) AddUser(ctx context.Context, user *repository.User) error {
-	user.CreatedAt = time.Now() // Set CreatedAt before adding
+	user.CreatedAt = time.Now()
 	return s.repo.AddUser(ctx, user)
 }
 

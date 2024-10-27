@@ -14,7 +14,7 @@ import (
 )
 
 // GetRefsOfUserFromID
-// @Summary Получение данных о юзере
+// @Summary Получение списка рефералов пользователя.
 // @Tags UserService
 // @Description Метод возвращает список рефералов пользователя, какого именно юзера определяется по id.
 // @Accept json

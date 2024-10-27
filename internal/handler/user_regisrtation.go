@@ -18,6 +18,7 @@ import (
 // @Description Метод позволяет зарегестрировать нового пользователя.
 // @Accept json
 // @Produce json
+// @Param user body repository.User true "Информация о пользователе"
 // @Failure 401 {integer} integer
 // @Failure 500 {object} errors_handler.ErrorResponse
 // @Router /v1/users [post]
