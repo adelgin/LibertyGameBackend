@@ -10,6 +10,15 @@ import (
 )
 
 // GetMonthStatisticsHandler
+// @Summary Получение данных о количестве присоединившихся юзеров по месяцам.
+// @Tags UserService
+// @Description Метод возвращает количество присоединившихся юзеров по месяцам.
+// @Accept json
+// @Produce json
+// @Success 200 {object} []repository.MonthStatistics
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/monthstat [get]
 func (i *Implementation) GetMonthStatisticsHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()

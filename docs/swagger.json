@@ -1,0 +1,355 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Описание документации сваггер к api golang сервиса игры tap oil",
+        "title": "LibertyGame backend API [golang service]",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:9001",
+    "basePath": "/api",
+    "paths": {
+        "/v1/monthstat": {
+            "get": {
+                "description": "Метод возвращает количество присоединившихся юзеров по месяцам.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Получение данных о количестве присоединившихся юзеров по месяцам.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/repository.MonthStatistics"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/{id}": {
+            "get": {
+                "description": "Метод возвращает данные юзера, какого именно юзера определяется по id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Получение данных о юзере",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/repository.User"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/{id}/refs": {
+            "get": {
+                "description": "Метод возвращает список рефералов пользователя, какого именно юзера определяется по id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Получение данных о юзере",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/repository.User"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/{id}/refscount": {
+            "get": {
+                "description": "Метод возвращает количество рефералов пользователя, какого именно юзера определяется по id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Получение данных о юзере",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users": {
+            "post": {
+                "description": "Метод позволяет зарегестрировать нового пользователя.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Регистрация нового юзера",
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/all": {
+            "get": {
+                "description": "Метод возвращает количество юзеров",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Количество юзеров",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/{count}/top": {
+            "get": {
+                "description": "Метод возвращает топы игроков, количество людей в топе определяется по count.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "UserService"
+                ],
+                "summary": "Получение топов игроков",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "count",
+                        "name": "count",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/repository.Top_User"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors_handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "errors_handler.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "localized_error": {
+                    "type": "string"
+                }
+            }
+        },
+        "repository.MonthStatistics": {
+            "type": "object",
+            "properties": {
+                "month": {
+                    "type": "string"
+                },
+                "user_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "repository.Top_User": {
+            "type": "object",
+            "properties": {
+                "date_of_invite": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "inviter_count": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "repository.User": {
+            "type": "object",
+            "properties": {
+                "date_of_invite": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "inviter_id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

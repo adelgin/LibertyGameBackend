@@ -13,7 +13,17 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// GetTopUsers
+// GetTopOfRefs
+// @Summary Получение топов игроков
+// @Tags UserService
+// @Description Метод возвращает топы игроков, количество людей в топе определяется по count.
+// @Accept json
+// @Produce json
+// @Param count path int true "count"
+// @Success 200 {object} []repository.Top_User
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/users/{count}/top [get]
 func (i *Implementation) GetTopOfRefs() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

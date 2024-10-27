@@ -14,6 +14,16 @@ import (
 )
 
 // CountRefsOfUserFromID
+// @Summary Получение данных о юзере
+// @Tags UserService
+// @Description Метод возвращает количество рефералов пользователя, какого именно юзера определяется по id.
+// @Accept json
+// @Produce json
+// @Param id path int true "id"
+// @Success 200 {object} int64
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/user/{id}/refscount [get]
 func (i *Implementation) CountRefsOfUserFromID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

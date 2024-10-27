@@ -1,52 +1,48 @@
 package postgres
 
 import (
-	"database/sql"
-	"log"
-	"os"
 	"time"
 
 	"libertyGame/config"
-	"libertyGame/pkg/logger"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
-func ParseDB() config.Db {
-	logger, err := logger.NewLogger()
-	if err != nil {
-		log.Fatalf("error init logger: %v", err)
-	}
+// func ParseDB() config.Db {
+// 	logger, err := logger.NewLogger()
+// 	if err != nil {
+// 		log.Fatalf("error init logger: %v", err)
+// 	}
 
-	dbConfig := config.Db{
-		Host:         os.Getenv("DB_HOST"),
-		Port:         os.Getenv("DB_PORT"),
-		User:         os.Getenv("DB_USER"),
-		Password:     os.Getenv("DB_PASSWORD"),
-		Name:         os.Getenv("DB_NAME"),
-		MaxOpenConns: 25,
-		MaxIdleConns: 10,
-	}
+// 	dbConfig := config.Db{
+// 		Host:         os.Getenv("DB_HOST"),
+// 		Port:         os.Getenv("DB_PORT"),
+// 		User:         os.Getenv("DB_USER"),
+// 		Password:     os.Getenv("DB_PASSWORD"),
+// 		Name:         os.Getenv("DB_NAME"),
+// 		MaxOpenConns: 25,
+// 		MaxIdleConns: 10,
+// 	}
 
-	connString := dbConfig.ConnectionString()
+// 	connString := dbConfig.ConnectionString()
 
-	db, err := sql.Open("postgres", connString)
-	if err != nil {
-		logger.Error().Err(err).Msg("Error opening connection.")
-		return dbConfig
-	}
-	defer db.Close()
+// 	db, err := sql.Open("postgres", connString)
+// 	if err != nil {
+// 		logger.Error().Err(err).Msg("Error opening connection.")
+// 		return dbConfig
+// 	}
+// 	defer db.Close()
 
-	err = db.Ping()
-	if err != nil {
-		logger.Error().Err(err).Msg("Connection check error.")
-		return dbConfig
-	}
+// 	err = db.Ping()
+// 	if err != nil {
+// 		logger.Error().Err(err).Msg("Connection check error.")
+// 		return dbConfig
+// 	}
 
-	logger.Info().Err(err).Msg("Connection to the database established successfully.")
-	return dbConfig
-}
+// 	logger.Info().Err(err).Msg("Connection to the database established successfully.")
+// 	return dbConfig
+// }
 
 // Postgres - .
 type Postgres struct {

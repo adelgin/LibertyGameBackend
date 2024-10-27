@@ -13,6 +13,16 @@ import (
 )
 
 // GetUserByID
+// @Summary Получение данных о юзере
+// @Tags UserService
+// @Description Метод возвращает данные юзера, какого именно юзера определяется по id.
+// @Accept json
+// @Produce json
+// @Param id path int true "id"
+// @Success 200 {object} repository.User
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/user/{id} [get]
 func (i *Implementation) GetUserByID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

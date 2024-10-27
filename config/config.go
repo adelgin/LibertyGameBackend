@@ -41,11 +41,11 @@ func Parse() (*Config, error) {
 }
 
 type Config struct {
-	Environment       string             `long:"environment" env:"TAP_ENVIRONMENT" default:"test"`
-	Debug             bool               `long:"debug" env:"TAP_DEBUG"`
-	Timeout           int                `long:"timeout" env:"TAP_TIMEOUT" default:"1000000"`
-	MainBackendConfig *MainBackendConfig `group:"Main backend args" namespace:"mainbackend" env-namespace:"TAP_MAIN_BACKEND"`
-	Log               *LogConfig         `group:"Logger args" namespace:"logger" env-namespace:"TAP_LOGGER"`
+	Environment       string             `long:"environment" env:"ENVIRONMENT" default:"test"`
+	Debug             bool               `long:"debug" env:"DEBUG"`
+	Timeout           int                `long:"timeout" env:"TIMEOUT" default:"1000000"`
+	MainBackendConfig *MainBackendConfig `group:"Main backend args" namespace:"mainbackend" env-namespace:"MAIN_BACKEND"`
+	Log               *LogConfig         `group:"Logger args" namespace:"logger" env-namespace:"LOGGER"`
 	Db                *Db                `group:"database args" namespace:"db" env-namespace:"POSTGRES"`
 }
 

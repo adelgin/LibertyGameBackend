@@ -1,0 +1,237 @@
+basePath: /api
+definitions:
+  errors_handler.ErrorResponse:
+    properties:
+      error:
+        type: string
+      localized_error:
+        type: string
+    type: object
+  repository.MonthStatistics:
+    properties:
+      month:
+        type: string
+      user_count:
+        type: integer
+    type: object
+  repository.Top_User:
+    properties:
+      date_of_invite:
+        type: string
+      id:
+        type: integer
+      inviter_count:
+        type: integer
+      username:
+        type: string
+    type: object
+  repository.User:
+    properties:
+      date_of_invite:
+        type: string
+      id:
+        type: integer
+      inviter_id:
+        type: integer
+      username:
+        type: string
+    type: object
+host: localhost:9001
+info:
+  contact: {}
+  description: Описание документации сваггер к api golang сервиса игры tap oil
+  title: LibertyGame backend API [golang service]
+  version: "1.0"
+paths:
+  /v1/monthstat:
+    get:
+      consumes:
+      - application/json
+      description: Метод возвращает количество присоединившихся юзеров по месяцам.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.MonthStatistics'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Получение данных о количестве присоединившихся юзеров по месяцам.
+      tags:
+      - UserService
+  /v1/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Метод возвращает данные юзера, какого именно юзера определяется
+        по id.
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.User'
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Получение данных о юзере
+      tags:
+      - UserService
+  /v1/user/{id}/refs:
+    get:
+      consumes:
+      - application/json
+      description: Метод возвращает список рефералов пользователя, какого именно юзера
+        определяется по id.
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.User'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Получение данных о юзере
+      tags:
+      - UserService
+  /v1/user/{id}/refscount:
+    get:
+      consumes:
+      - application/json
+      description: Метод возвращает количество рефералов пользователя, какого именно
+        юзера определяется по id.
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Получение данных о юзере
+      tags:
+      - UserService
+  /v1/users:
+    post:
+      consumes:
+      - application/json
+      description: Метод позволяет зарегестрировать нового пользователя.
+      produces:
+      - application/json
+      responses:
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Регистрация нового юзера
+      tags:
+      - UserService
+  /v1/users/{count}/top:
+    get:
+      consumes:
+      - application/json
+      description: Метод возвращает топы игроков, количество людей в топе определяется
+        по count.
+      parameters:
+      - description: count
+        in: path
+        name: count
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/repository.Top_User'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Получение топов игроков
+      tags:
+      - UserService
+  /v1/users/all:
+    get:
+      consumes:
+      - application/json
+      description: Метод возвращает количество юзеров
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "401":
+          description: Unauthorized
+          schema:
+            type: integer
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors_handler.ErrorResponse'
+      summary: Количество юзеров
+      tags:
+      - UserService
+swagger: "2.0"

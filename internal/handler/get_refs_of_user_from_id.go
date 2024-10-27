@@ -14,6 +14,16 @@ import (
 )
 
 // GetRefsOfUserFromID
+// @Summary Получение данных о юзере
+// @Tags UserService
+// @Description Метод возвращает список рефералов пользователя, какого именно юзера определяется по id.
+// @Accept json
+// @Produce json
+// @Param id path int true "id"
+// @Success 200 {object} []repository.User
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/user/{id}/refs [get]
 func (i *Implementation) GetRefsOfUserFromID() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)

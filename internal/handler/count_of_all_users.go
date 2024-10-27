@@ -11,6 +11,15 @@ import (
 )
 
 // CountOfAllUsers
+// @Summary Количество юзеров
+// @Tags UserService
+// @Description Метод возвращает количество юзеров
+// @Accept json
+// @Produce json
+// @Success 200 {object} int64
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/users/all [get]
 func (i *Implementation) CountOfAllUsers() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

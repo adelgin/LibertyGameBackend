@@ -3,6 +3,7 @@ package app
 import (
 	// "fmt"
 
+	"context"
 	"fmt"
 	"libertyGame/config"
 	postgres "libertyGame/internal"
@@ -46,6 +47,8 @@ func Run() {
 
 	// Создание репозитория
 	r := repository.NewRepository(database) // Передаем *database в repository.NewRepository
+
+	r.CreateTable(context.Background())
 
 	// services
 	userSerivce := service.NewUserService(r)

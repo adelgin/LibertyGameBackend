@@ -13,6 +13,14 @@ import (
 )
 
 // UserRegistration
+// @Summary Регистрация нового юзера
+// @Tags UserService
+// @Description Метод позволяет зарегестрировать нового пользователя.
+// @Accept json
+// @Produce json
+// @Failure 401 {integer} integer
+// @Failure 500 {object} errors_handler.ErrorResponse
+// @Router /v1/users [post]
 func (i *Implementation) UserRegistration() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var userRequest repository.User
