@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	postgres "libertyGame/internal"
-	"libertyGame/pkg/logger"
 	"time"
 
 	_ "github.com/goccy/go-json"
@@ -21,7 +20,6 @@ type Repository interface {
 	GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error)
 	GetMonthStatistics(ctx context.Context) ([]MonthStatistics, error)
 	CreateTable(ctx context.Context) error
-	CreateDb(ctx context.Context) error
 }
 
 type User struct {
@@ -134,21 +132,8 @@ func (r repository) GetMonthStatistics(ctx context.Context) ([]MonthStatistics, 
 	return stats, nil
 }
 
-func (r repository) CreateDb(ctx context.Context) error {
-	query := `
-    CREATE DATABASE liberty
-	`
-
-	_, err := r.db.ExecContext(ctx, query)
-	if err != nil {
-		return fmt.Errorf("error while creating database liberty: %w", err)
-	}
-	return nil
-}
-
 func (r repository) CreateTable(ctx context.Context) error {
 	query := `
-    CREATE DATABASE liberty;
 	CREATE TABLE IF NOT EXISTS users (
 	id BIGINT PRIMARY KEY,
 	username VARCHAR(255) UNIQUE NOT NULL,
@@ -156,10 +141,6 @@ func (r repository) CreateTable(ctx context.Context) error {
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (inviter_id) REFERENCES users(id)
 	)`
-
-	logmaster, _ := logger.NewLogger()
-
-	logmaster.Info().Msg("CreateDbAndTable Started")
 
 	_, err := r.db.ExecContext(ctx, query)
 	if err != nil {
