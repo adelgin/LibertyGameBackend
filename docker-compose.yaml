@@ -12,11 +12,13 @@ services:
     env_file: .env
     environment:
       - POSTGRES_HOST=db
-      - POSTGRES_NAME=db
+      - POSTGRES_NAME=liberty
       - POSTGRES_PORT=5432
       - MAIN_BACKEND_HOST=0.0.0.0
       - MAIN_BACKEND_PORT=9001
       - LOGGER_LEVEL=error
+    ports:
+      - "9001:9001"
     build:
       context: .
       dockerfile: deployment/Dockerfile

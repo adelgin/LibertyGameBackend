@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	//"database/sql"
 	"fmt"
 	postgres "libertyGame/internal"
+	"libertyGame/pkg/logger"
 	"time"
 
 	_ "github.com/goccy/go-json"
@@ -20,7 +20,8 @@ type Repository interface {
 	CountRefsOfUserFromID(ctx context.Context, id int64) (int64, error)
 	GetTopOfRefs(ctx context.Context, count int64) ([]Top_User, error)
 	GetMonthStatistics(ctx context.Context) ([]MonthStatistics, error)
-	CreateDbAndTable(ctx context.Context) error
+	CreateTable(ctx context.Context) error
+	CreateDb(ctx context.Context) error
 }
 
 type User struct {
@@ -133,24 +134,36 @@ func (r repository) GetMonthStatistics(ctx context.Context) ([]MonthStatistics, 
 	return stats, nil
 }
 
-func (r repository) CreateDbAndTable(ctx context.Context) error {
+func (r repository) CreateDb(ctx context.Context) error {
 	query := `
-	DO $$
-	BEGIN
-  	IF NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'liberty') THEN
-    	CREATE DATABASE liberty;
-  	END IF;
-	END $$;
+    CREATE DATABASE liberty
+	`
+
+	_, err := r.db.ExecContext(ctx, query)
+	if err != nil {
+		return fmt.Errorf("error while creating database liberty: %w", err)
+	}
+	return nil
+}
+
+func (r repository) CreateTable(ctx context.Context) error {
+	query := `
+    CREATE DATABASE liberty;
 	CREATE TABLE IF NOT EXISTS users (
 	id BIGINT PRIMARY KEY,
 	username VARCHAR(255) UNIQUE NOT NULL,
 	inviter_id INT,
 	created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (inviter_id) REFERENCES users(id)
-	);`
+	)`
+
+	logmaster, _ := logger.NewLogger()
+
+	logmaster.Info().Msg("CreateDbAndTable Started")
+
 	_, err := r.db.ExecContext(ctx, query)
 	if err != nil {
-		return fmt.Errorf("ошибка создания таблицы users: %w", err)
+		return fmt.Errorf("error while creating table users: %w", err)
 	}
 	return nil
 }
