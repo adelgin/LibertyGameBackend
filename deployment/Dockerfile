@@ -27,7 +27,6 @@ COPY --from=build /etc/passwd /etc/passwd
 
 USER gopher
 
-COPY --from=build /opt/${NAME}/migrations /migrations
 COPY --from=build /opt/${NAME}/bin/${NAME} /${NAME}
 
 CMD ["./liberty"]
